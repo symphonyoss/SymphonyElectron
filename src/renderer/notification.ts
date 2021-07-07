@@ -595,6 +595,8 @@ class Notification extends NotificationHandler {
    * notification window opts
    */
   private getNotificationOpts(): Electron.BrowserWindowConstructorOptions {
+    const contextIsolation = config.getGlobalConfigFields(['contextIsolation'])
+      .contextIsolation;
     return {
       width: 344,
       height: 88,
@@ -611,6 +613,11 @@ class Notification extends NotificationHandler {
         sandbox: !isNodeEnv,
         nodeIntegration: isNodeEnv,
         devTools: true,
+        contextIsolation: isNodeEnv
+          ? false
+          : typeof contextIsolation === 'boolean'
+          ? contextIsolation
+          : true,
       },
     };
   }
